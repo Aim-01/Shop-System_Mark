@@ -1,0 +1,23 @@
+{
+  "name": "shop-system_mark",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pl.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aim-01/Shop-System_Mark.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Aim-01/Shop-System_Mark/issues"
+  },
+  "homepage": "https://github.com/Aim-01/Shop-System_Mark#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1"
+  }
+}

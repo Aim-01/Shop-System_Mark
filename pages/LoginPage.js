@@ -13,6 +13,8 @@ export class LoginPage {
     this.emailRequiredError = page.getByText('Email обязателен');
     this.passwordRequiredError = page.getByText('Пароль обязателен');
     this.invalidCredentialsToast = page.getByText('Неверный email или пароль');
+    this.katalogTovarovTitle = page.getByRole('heading', { name: 'Каталог товаров' });
+
 
 
   }
@@ -25,7 +27,7 @@ export class LoginPage {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
-    await this.registrationLink.click();
+   
   }
 
   async goToRegistration() {

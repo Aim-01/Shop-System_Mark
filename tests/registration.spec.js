@@ -2,6 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { RegistrationPage } from '../pages/RegistrationPage';
 
+test.describe('Registration form tests', () => {
 
 test('1.The link "Зарегистрироваться" is clickable', async ({ page }) => {
   const registrationPage = new RegistrationPage(page);
@@ -19,8 +20,6 @@ test('1.The link "Зарегистрироваться" is clickable', async ({ 
   await expect(page.getByText('Создать аккаунт'));
 });
 
-
-
 // Генераторы случайных данных для регистрации через функцию
 function randomString(length = 8) {
   return Math.random().toString(36).substring(2, 2 + length);
@@ -29,7 +28,6 @@ function randomString(length = 8) {
 function randomEmail() {
   return `${randomString(6)}@test.com`;
 }
-
 
 
 test('2. User is able to Register', async ({ page }) => {
@@ -70,9 +68,6 @@ test('2. User is able to Register', async ({ page }) => {
 });
 
 
-
-
-
 test('3. User trying to register with empty fields', async ({ page }) => {
    const registrationPage = new RegistrationPage(page);
 
@@ -91,7 +86,6 @@ test('3. User trying to register with empty fields', async ({ page }) => {
   await expect(registrationPage.phone_RequiredError).toBeVisible();
   await expect(registrationPage.password_RequiredError).toBeVisible();
 });
-
 
 
 test('4. User is trying to enter an invalid formatted email', async ({ page }) => {
@@ -118,7 +112,6 @@ test('4. User is trying to enter an invalid formatted email', async ({ page }) =
 });
 
 
-
 test('5. User is trying to enter invaid (short) password (registration module)', async ({ page }) => {
   const registrationPage = new RegistrationPage(page);
 
@@ -141,8 +134,6 @@ test('5. User is trying to enter invaid (short) password (registration module)',
   await expect(registrationPage.invalidPasswordToast).toBeVisible();
 
 });
-
-
 
 
 test('6. User trying to enter registered username (registration module)', async ({ page }) => {
@@ -169,7 +160,6 @@ test('6. User trying to enter registered username (registration module)', async 
 });
 
 
-
 test('7. User is trying to enter registered Email (registration module)', async ({ page }) => {
   const registrationPage = new RegistrationPage(page);
 
@@ -194,7 +184,6 @@ test('7. User is trying to enter registered Email (registration module)', async 
 });
 
 
-
 test('8. User is trying to enter an invalid formatted Phone number', async ({ page }) => {
   const registrationPage = new RegistrationPage(page);
 
@@ -217,7 +206,6 @@ test('8. User is trying to enter an invalid formatted Phone number', async ({ pa
   await expect(registrationPage.invalidPhoneToast).toBeVisible();
 
 });
-
 
 
 test('9. User trying to enter spaces in fields', async ({ page }) => {
@@ -247,5 +235,6 @@ test('9. User trying to enter spaces in fields', async ({ page }) => {
   //Result: подсвечены красным поля с невалидными данными (все = 12 красных строк (по 2 на 1 поле))
   await expect(registrationPage.redText).toHaveCount(12);
 
+});
 
 });

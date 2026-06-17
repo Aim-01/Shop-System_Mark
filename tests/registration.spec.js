@@ -68,7 +68,7 @@ test('2. User is able to Register', async ({ page }) => {
 });
 
 
-test('3. User trying to register with empty fields', async ({ page }) => {
+test('3. User is trying to register with empty fields', async ({ page }) => {
    const registrationPage = new RegistrationPage(page);
 
   // Precondition

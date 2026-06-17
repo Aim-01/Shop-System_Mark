@@ -6,7 +6,7 @@ export class RegistrationPage {
     // Локаторы формы регистрации
     this.title = page.getByText('Создать аккаунт');
     this.nameInput = page.getByLabel('Имя');
-this.surnameInput = page.getByLabel('Фамилия');
+    this.surnameInput = page.getByLabel('Фамилия');
     this.email_Input = page.getByPlaceholder("user@example.com");
     this.usernameInput = page.getByPlaceholder("ivan_ivanov");
     this.phoneInput = page.getByPlaceholder("+1234567890");

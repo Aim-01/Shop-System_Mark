@@ -1,139 +1,42 @@
-// tests/login.spec.js
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+import { test, expect } from './fixtures';
 
 test.describe('Login form tests', () => {
 
-
-test('1. The User is able to Log in', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  // Precondition
-  await loginPage.goto();
-  await expect(loginPage.title).toBeVisible();
-
-  // Test data
-  const email = 'user1@test.com';
-  const password = 'user123';
-
-  // Steps
-  await loginPage.login(email, password);
-  await page.pause();
-
-  // Result: открывается страница Каталога товаров
+test('1. The User is able to Log in', async ({ loginPage }) => {
+  await loginPage.login('user1@test.com', 'user123');
   await expect(loginPage.katalogTovarovTitle).toBeVisible();
 });
 
-
-test('2. The link "Войти" is clickable', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  // Precondition
-  await loginPage.goto();
-  await expect(loginPage.title).toBeVisible();
-
-  // Steps
+test('2. The link "Войти" is clickable', async ({ loginPage }) => {
   await loginPage.registrationLink.click();
   await loginPage.loginLink.click();
-
-  // Result: открывается форма Входа
-  await expect(page.getByText('Вход в систему'));
+  await expect(loginPage.title).toBeVisible();
 });
 
-
-test('3. User trying to log in without entering email and password', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  // Precondition
-  await loginPage.goto();
-  await expect(loginPage.title).toBeVisible();
-
-  // Steps
+test('3. The User trying to log in without entering email and password', async ({ loginPage }) => {
   await loginPage.loginButton.click();
-
-  // Result: появляется предупреждение для обязательных полей
   await expect(loginPage.emailRequiredError).toBeVisible();
   await expect(loginPage.passwordRequiredError).toBeVisible();
 });
 
-
-test('4. User trying to log in with invalid formatted email (true password)', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  // Precondition
-  await loginPage.goto();
-  await expect(loginPage.title).toBeVisible();
-
-  // Test data
-  const email = 'user1test.com';
-  const password = 'user123';
-
-  // Steps
-  await loginPage.login(email, password);
-
-  // Result: нижний правый угол - тоаст-уведомление об ошибке
+test('4. The User is trying to log in with invalid formatted email (true password)', async ({ loginPage }) => {
+  await loginPage.login('user1test.com', 'user123');
   await expect(loginPage.invalidCredentialsToast).toBeVisible();
-
 });
 
-
-test('5. User trying to log in with invalid password (true login)', async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  // Precondition
-  await loginPage.goto();
-  await expect(loginPage.title).toBeVisible();
-
-  // Test data
-  const email = 'user1@test.com';
-  const password = 'qwe123';
-
-  // Steps
-  await loginPage.login(email, password);
-
-  //Result: нижний правый угол - тоаст-уведомление об ошибке
+test('5. The User is trying to log in with invalid password (true login)', async ({ loginPage }) => {
+  await loginPage.login('user1@test.com', 'qwe123');
   await expect(loginPage.invalidCredentialsToast).toBeVisible();
-
 });
 
-
-test("6. User trying to log in with an email that wasn't registered  in the system (unregistered email)", async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  // Precondition
-  await loginPage.goto();
-  await expect(loginPage.title).toBeVisible();
-
-  // Test data
-  const email = 'qwert@test.com';
-  const password = 'qwert123';
-
-  // Steps
-  await loginPage.login(email, password);
-
-  // Result: нижний правый угол - тоаст-уведомление об ошибке
+test("6. The User is trying to log in with an email that wasn't registered in the system", async ({ loginPage }) => {
+  await loginPage.login('qwert@test.com', 'qwert123');
   await expect(loginPage.invalidCredentialsToast).toBeVisible();
-
 });
 
-
-test("7. User trying to enter spaces in fields", async ({ page }) => {
-  const loginPage = new LoginPage(page);
-
-  // Precondition
-  await loginPage.goto();
-  await expect(loginPage.title).toBeVisible();
-
-  // Test data
-  const email = '   user1@test.com';
-  const password = '   user123   ';
-
-  // Steps
-  await loginPage.login(email, password);
-
-  // Result: нижний правый угол - тоаст-уведомление об ошибке
+test('7. User is trying to enter spaces in fields', async ({ loginPage }) => {
+  await loginPage.login('   user1@test.com', '   user123   ');
   await expect(loginPage.invalidCredentialsToast).toBeVisible();
-
 });
 
 });

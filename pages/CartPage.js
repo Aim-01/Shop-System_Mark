@@ -11,8 +11,8 @@ export class CartPage {
     this.loginButton = page.getByRole('button', { name: 'Войти' });
 
     this.cartIcon = page.locator('a:has(svg.lucide-shopping-cart)');
-    this.katalogTovarovTitle = page.getByRole('heading', { name: 'Каталог товаров' });
-    this.vashaKorzinaTitle = page.getByRole('heading', { name: 'Ваша Корзина' });
+    this.catalogOfItemsTitle = page.getByRole('heading', { name: 'Каталог товаров' });
+    this.yourCartTitle = page.getByRole('heading', { name: 'Ваша Корзина' });
     this.itemLinkPage = page.locator('a[href="/product/5"]');
     this.itemLinkPage2 = page.locator('a[href="/product/2"]');
     this.AddButtonOnPage = page.getByRole('button', { name: 'Добавить в корзину' });
@@ -52,7 +52,7 @@ export class CartPage {
     await this.toCartButton.first().click();
   }
 
-  async goToSamsungPage(){
+  async goToProductPage(){
     await this.itemLinkPage.click();
   }
 

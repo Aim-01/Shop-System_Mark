@@ -11,7 +11,7 @@ test.describe('Cart module tests', () => {
     const cart = new CartPage(page);
     await cart.goto();
     await cart.loginCart(email, password);
-    await expect(cart.katalogTovarovTitle).toBeVisible();
+    await expect(cart.catalogOfItemsTitle).toBeVisible();
     await cart.openCartPage();
     await cart.clearCart();
   });
@@ -21,7 +21,7 @@ test.describe('Cart module tests', () => {
 
     await cart.openCartPage();
     await page.waitForURL('**/cart'); // ожидание
-    await expect(cart.vashaKorzinaTitle).toBeVisible({ timeout: 3000 });
+    await expect(cart.yourCartTitle).toBeVisible({ timeout: 3000 });
   });
  
   test('2. User is able to put an item to the cart', async ({ page }) => {
@@ -31,7 +31,7 @@ test.describe('Cart module tests', () => {
     await cart.addItemToCart();
     await cart.openCartPage();
 
-    await expect(cart.vashaKorzinaTitle).toBeVisible({ timeout: 3000 }); // страница Корзины открыта
+    await expect(cart.yourCartTitle).toBeVisible({ timeout: 3000 }); // страница Корзины открыта
     await expect(cart.notZeroPrice).toHaveCount(0); // сумма не равна нулю
 
   });
@@ -40,7 +40,7 @@ test('3. User is able to put 2 same items to the cart (Samsung S23 Ultra)', asyn
   const cart = new CartPage(page);
 
   await cart.gotoCatalog();    
-  await cart.goToSamsungPage();
+  await cart.goToProductPage();
   await cart.selectTwoSamsungs();
   await cart.openCartPage();
 
@@ -57,7 +57,7 @@ test('4. User is able to remove an item from the cart', async ({ page }) => {
     await cart.addItemToCart();
     await cart.openCartPage();
     await page.waitForURL('**/cart'); // ожидание
-    await expect(cart.vashaKorzinaTitle).toBeVisible({ timeout: 3000 }); // страница Корзины открыта
+    await expect(cart.yourCartTitle).toBeVisible({ timeout: 3000 }); // страница Корзины открыта
     await cart.clearCart();
     await page.pause(); 
     await expect(cart.emptyCart).toBeVisible({ timeout: 3000 }); // Корзина пуста

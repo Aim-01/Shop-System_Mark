@@ -1,6 +1,8 @@
-// tests/login.spec.js
+// tests/registration.spec.js
+
 import { test, expect } from '@playwright/test';
 import { RegistrationPage } from '../pages/RegistrationPage';
+
 
 test.describe('Registration form tests', () => {
 

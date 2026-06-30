@@ -1,4 +1,5 @@
 // pages/CartPage.js
+
 import { expect } from '@playwright/test';
 
 export class CartPage {
@@ -13,12 +14,14 @@ export class CartPage {
     this.cartIcon = page.locator('a:has(svg.lucide-shopping-cart)');
     this.catalogOfItemsTitle = page.getByRole('heading', { name: 'Каталог товаров' });
     this.yourCartTitle = page.getByRole('heading', { name: 'Ваша Корзина' });
-    this.itemLinkPage = page.locator('a[href="/product/5"]');
+    this.itemLinkPage = page.locator('a.group.flex').first(); // находим первый товар на странице
+    this.productTitle = page.locator('h1.text-3xl.font-bold'); // локатор названия товара на странице товара (h1)
+     this.cartItemTitle = page.locator('h4.font-semibold'); // локатор названия товара в корзине (h4)
+
     this.itemLinkPage2 = page.locator('a[href="/product/2"]');
     this.AddButtonOnPage = page.getByRole('button', { name: 'Добавить в корзину' });
     this.priceToSum = page.locator('p.text-3xl.font-bold'); // цена товара на странце этого товара
     this.totalAmountInCart = page.getByText(/Итого:\s*\d+[.,]\d+\s*руб\./);
-    this.twoSamsungInCart = page.getByText("Samsung S23 Ultra");
 
     // Элементы корзины
     this.emptyCart = page.getByText('Ваша корзина пуста.');
@@ -53,18 +56,28 @@ export class CartPage {
   }
 
   async goToProductPage(){
-    await this.itemLinkPage.click();
+    await this.itemLinkPage.click(); // должно быть открытие страницы товара (для тк с 2мя одинаковыми в корзину)
   }
 
-  async selectTwoSamsungs(){ // для тк с двумя одинаковыми товарами
+async getProductName() {
+    this.productName = await this.productTitle.innerText();
+    return this.productName;
+  }
+
+
+ async selectTwoSameItems() {
     await this.AddButtonOnPage.click();
-    await this.page.waitForTimeout(1000);
+    await this.page.waitForTimeout(500);
     await this.AddButtonOnPage.click();
   }
 
-async countTwoSamsungs() { // для тк с двумя одинаковыми товарами
-  return await this.twoSamsungInCart.count();
-}
+async countTwoSameItems() {
+    const locator = this.page.locator('h4.font-semibold', { hasText: this.productName });
+     await locator.first().waitFor({ state: 'visible', timeout: 3000 });
+    return await locator.count();
+  }
+
+
 async clearCart() {
   await this.cartIcon.click();
 
@@ -82,21 +95,31 @@ async clearCart() {
   }
 }
 
+async getCartTotal() { // находим сумму в корзине
+  const totalText = await this.totalAmountInCart.innerText();
+  return this.parsePrice(totalText);
+}
+
+parsePrice(text) {  // находим сумму в корзине и распарсим эту сумму
+  return parseFloat(text.replace(/[^\d.,]/g, '').replace(',', '.'));
+}
+
+
 async twoItemsAddToCart() {
 
   await this.page.goto('/'); // на страницу каталога переход
   await this.page.waitForLoadState('networkidle'); // ждём загрузку
-  await this.itemLinkPage.click();  // 2. Открываем первый товар
+  await this.itemLinkPage.click();  // Открываем первый товар
   await this.AddButtonOnPage.waitFor({ state: 'visible', timeout: 7000 });
   await this.AddButtonOnPage.click();
-  await this.page.goto('/'); // 3. Возвращаемся в каталог
+  await this.page.goto('/'); // Возвращаемся в каталог
   await this.page.waitForLoadState('networkidle');
-  await this.itemLinkPage2.click();  // 4. Открываем второй товар
+  await this.itemLinkPage2.click();  // Открываем второй товар
   await this.AddButtonOnPage.waitFor({ state: 'visible', timeout: 7000 });
   await this.AddButtonOnPage.click();
 }
 
-async sumTwoProductPrices() {
+async sumTwoProductPrices() { // складываем цены из каталога по товарам
 
   const getPrice = async () => {
     await this.priceToSum.waitFor({ state: 'visible', timeout: 7000 });

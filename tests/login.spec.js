@@ -1,4 +1,6 @@
-import { test, expect } from './fixtures';
+// tests/login.spec.js
+
+import { test, expect } from './fixturesLogin';
 
 test.describe('Login form tests', () => {
 
@@ -34,7 +36,7 @@ test("6. The User is trying to log in with an email that wasn't registered in th
   await expect(loginPage.invalidCredentialsToast).toBeVisible();
 });
 
-test('7. User is trying to enter spaces in fields', async ({ loginPage }) => {
+test('7. The User is trying to enter spaces in fields', async ({ loginPage }) => {
   await loginPage.login('   user1@test.com', '   user123   ');
   await expect(loginPage.invalidCredentialsToast).toBeVisible();
 });

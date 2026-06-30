@@ -1,4 +1,5 @@
 // pages/LoginPage.js
+
 export class LoginPage {
   constructor(page) {
     this.page = page;
@@ -14,8 +15,6 @@ export class LoginPage {
     this.passwordRequiredError = page.getByText('Пароль обязателен');
     this.invalidCredentialsToast = page.getByText('Неверный email или пароль');
     this.katalogTovarovTitle = page.getByRole('heading', { name: 'Каталог товаров' });
-
-
 
   }
 
@@ -35,4 +34,3 @@ export class LoginPage {
     await this.loginLink.click();
   }
 }
-

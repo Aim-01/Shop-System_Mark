@@ -6,11 +6,6 @@ export class CartPage {
   constructor(page) {
     this.page = page;
 
-    // Логин
-    this.emailInput = page.getByPlaceholder("user@example.com");
-    this.passwordInput = page.getByPlaceholder("••••••••");
-    this.loginButton = page.getByRole('button', { name: 'Войти' });
-
     this.cartIcon = page.locator('a:has(svg.lucide-shopping-cart)');
     this.catalogOfItemsTitle = page.getByRole('heading', { name: 'Каталог товаров' });
     this.yourCartTitle = page.getByRole('heading', { name: 'Ваша Корзина' });
@@ -35,20 +30,11 @@ export class CartPage {
 
   }
 
-  async goto() {
-    await this.page.goto('/login'); // baseURL подставится автоматически
-  }
   async gotoCatalog() {
     await this.page.goto('/'); // на страницу каталога переход
 }
  async openCartPage() { // переход на страницу Корзины через иконку корзины в хэдере
     await this.cartIcon.click();
-  }
-
-  async loginCart(email, password) { // логинимся
-    await this.emailInput.fill(email);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
   }
 
  async addItemToCart() {
@@ -64,7 +50,6 @@ async getProductName() {
     return this.productName;
   }
 
-
  async selectTwoSameItems() {
     await this.AddButtonOnPage.click();
     await this.page.waitForTimeout(500);
@@ -78,10 +63,12 @@ async countTwoSameItems() {
   }
 
 
-async clearCart() {
-  await this.cartIcon.click();
-
-  const deleteButtons = this.page.getByRole('button', { name: 'Удалить' });
+async clearCart() { // очистка Корзины
+  await this.cartIcon.click({ timeout: 500 });
+   // дождаться, что корзина открылась
+  await this.yourCartTitle.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});
+  
+  const deleteButtons = this.page.locator('button:has-text("Удалить")');
 
   while (await deleteButtons.count() > 0) {
     const before = await deleteButtons.count();
@@ -105,19 +92,20 @@ parsePrice(text) {  // находим сумму в корзине и распа
 }
 
 
-async twoItemsAddToCart() {
+async twoItemsAddToCart(productIds = []) { // для тк с подсчётом суммы - добавляем 2 товара в корзину
+  for (const id of productIds) {
 
-  await this.page.goto('/'); // на страницу каталога переход
-  await this.page.waitForLoadState('networkidle'); // ждём загрузку
-  await this.itemLinkPage.click();  // Открываем первый товар
-  await this.AddButtonOnPage.waitFor({ state: 'visible', timeout: 7000 });
-  await this.AddButtonOnPage.click();
-  await this.page.goto('/'); // Возвращаемся в каталог
-  await this.page.waitForLoadState('networkidle');
-  await this.itemLinkPage2.click();  // Открываем второй товар
-  await this.AddButtonOnPage.waitFor({ state: 'visible', timeout: 7000 });
-  await this.AddButtonOnPage.click();
+    await this.page.goto('/');
+    await this.page.waitForLoadState('networkidle'); // ждём прогрузку страницы
+
+    const productLink = this.page.locator(`a[href="/product/${id}"]`); // ищем товар по ID
+    await productLink.waitFor({ state: 'visible', timeout: 5000 }); 
+    await productLink.click();
+    await this.AddButtonOnPage.waitFor({ state: 'visible', timeout: 7000 });  // Ждём кнопку "Добавить в корзину"
+    await this.AddButtonOnPage.click(); // Добавляем товар
+  }
 }
+
 
 async sumTwoProductPrices() { // складываем цены из каталога по товарам
 
@@ -161,8 +149,5 @@ async checkImageNot404(src) { // работаем со ссылкой на ка�
   expect(response.status()).toBe(200);
 }
 
-  async logout() {
-    await this.page.getByRole('button', { name: 'user1' }).click();
-    await this.page.getByText('Выйти').click();
-  }
+ 
 }

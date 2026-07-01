@@ -33,4 +33,10 @@ export class LoginPage {
     await this.registrationLink.click();
     await this.loginLink.click();
   }
+
+   async logout() {
+    await this.page.getByRole('button', { name: 'user1' }).click();
+    await this.page.getByText('Выйти').click();
+  }
+
 }

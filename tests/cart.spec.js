@@ -1,7 +1,9 @@
 // tests/cart.spec.js
-
+// тесты последовательные
 import { test, expect } from '@playwright/test';
 import { CartPage } from '../pages/CartPage';
+import { LoginPage } from '../pages/LoginPage';
+
 
 const user1 = { email: "user1@test.com", password: "user123" }; // тестовые данные юзеров
 const user2 = { email: "user2@test.com", password: "user123" };
@@ -9,13 +11,14 @@ const user2 = { email: "user2@test.com", password: "user123" };
 test.describe('Cart module tests', () => {
 
   test.beforeEach(async ({ page }, testInfo) => {
+     
     const cart = new CartPage(page);
+    const login = new LoginPage(page);
 
     // Определяем пользователя по номеру теста (юзер 2 используется в тех что чаще падают)
     const title = testInfo.title;
 
     const user =
-     // title.startsWith('4.') ||
       title.startsWith('6.') ||
       title.startsWith('7.')
         ? user2
@@ -23,11 +26,14 @@ test.describe('Cart module tests', () => {
 
     testInfo.user = user; // Сохраняем юзера в testInfo для логирования
 
-    await cart.goto();
-    await cart.loginCart(user.email, user.password);
+    await login.goto();
+    await login.login(user.email, user.password); // логинимся по методу из LoginPage
     await expect(cart.catalogOfItemsTitle).toBeVisible();
-    await cart.openCartPage({ timeout: 3000 }); // подождём прогрузку
-    await cart.clearCart({ timeout: 3000 });
+    await cart.openCartPage({ timeout: 3000 }); // подождём прогрузку Корзины
+console.log(">>> beforeEach: проверяем товары в корзине");
+await cart.clearCart({ timeout: 3000 });
+console.log(">>> beforeEach: корзина пуста");
+
   });
 
   test('1. The Cart page is displayed', async ({ page }, testInfo) => {
@@ -71,7 +77,7 @@ test.describe('Cart module tests', () => {
     await cart.openCartPage();
     await cart.clearCart();
 
-    await expect(cart.emptyCart).toBeVisible();
+    await expect(cart.emptyCart).toBeVisible({ timeout: 5000 });
   });
 
   test('5. The [Оформить заказ] button is clickable', async ({ page }, testInfo) => {
@@ -92,8 +98,8 @@ test('6. Total price is calculated correctly', async ({ page }, testInfo) => {
 
   const cart = new CartPage(page);
 
-  await cart.openCartPage();
-  await cart.twoItemsAddToCart();
+ // await cart.gotoCatalog();
+  await cart.twoItemsAddToCart([1, 2]); // ID товаров, которые добавляем в Корзину
 
   const expectedSum = await cart.sumTwoProductPrices();
   console.log("Сумма двух товаров из каталога = " + expectedSum);
@@ -110,8 +116,10 @@ test('6. Total price is calculated correctly', async ({ page }, testInfo) => {
     console.log(`>>> Тест 7 выполняется под пользователем: ${testInfo.user.email}`);
 
     const cart = new CartPage(page);
-    await cart.clearCart();
+   
     await cart.openCartPage();
+    await page.pause();
+
     await expect(cart.submitButton).toBeDisabled({ timeout: 3000 });
   });
 
@@ -132,13 +140,14 @@ test('6. Total price is calculated correctly', async ({ page }, testInfo) => {
     console.log(`>>> Тест 9 выполняется под пользователем: ${testInfo.user.email}`);
 
     const cart = new CartPage(page);
+    const login = new LoginPage(page);
     await cart.gotoCatalog();
     await cart.addItemToCart();
     await cart.twoItemsAddToCart();
-    await cart.logout();
+    await login.logout();
 
     // повторный вход тем же юзером
-    await cart.loginCart(testInfo.user.email, testInfo.user.password);
+    await login.login(testInfo.user.email, testInfo.user.password);
 
     await cart.openCartPage();
     await expect(cart.emptyCart).not.toBeVisible();

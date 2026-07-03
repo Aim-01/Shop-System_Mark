@@ -55,17 +55,9 @@ test('2. User is able to Register', async ({ page }) => {
     phon_e,
     passwor_d
   );
-  //console.log('URL после регистрации:', await page.url()); // проверка что за страница открылась
 
-//////
-  //смотрим что происходит после нажатия кнопки Регистрация 
-  //await page.pause(); // и смотрим в терминале команду npx playwright test tests/registration.spec.js --headed чтобы понять в чём ошибка
-  // Devtools - Sources - поставить breakpoints
-//////
 
- // Result: 
-//нижний правый угол - тоаст-уведомление об успехе "Регистрация прошла успешно, теперь вы можете войти"
-  await expect(registrationPage.validCredentialsToast).toBeVisible();
+  await expect(registrationPage.validCredentialsToast).toBeVisible(); //нижний правый угол - тоаст-уведомление об успехе "Регистрация прошла успешно, теперь вы можете войти"
 
 });
 
@@ -227,12 +219,6 @@ test('9. User trying to enter spaces in fields', async ({ page }) => {
 
   //Steps
   await registrationPage.registration(nameReg, surnameReg, emailReg, usernameReg, phoneReg, passwordReg);
-
-  // //////
-//   //смотрим что происходит после нажатия кнопки Регистрация 
-//await page.pause(); // и смотрим в терминале команду npx playwright test tests/registration.spec.js --headed чтобы понять в чём ошибка
-//   // Devtools - Sources - поставить breakpoints
-// //////
 
   //Result: подсвечены красным поля с невалидными данными (все = 12 красных строк (по 2 на 1 поле))
   await expect(registrationPage.redText).toHaveCount(12);

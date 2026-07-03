@@ -11,7 +11,6 @@ export class CartPage {
     this.yourCartTitle = page.getByRole('heading', { name: 'Ваша Корзина' });
     this.itemLinkPage = page.locator('a.group.flex').first(); // находим первый товар на странице
     this.productTitle = page.locator('h1.text-3xl.font-bold'); // локатор названия товара на странице товара (h1)
-     this.cartItemTitle = page.locator('h4.font-semibold'); // локатор названия товара в корзине (h4)
 
     this.itemLinkPage2 = page.locator('a[href="/product/2"]');
     this.AddButtonOnPage = page.getByRole('button', { name: 'Добавить в корзину' });
@@ -22,7 +21,6 @@ export class CartPage {
     this.emptyCart = page.getByText('Ваша корзина пуста.');
     this.toCartButton = page.getByRole('button', { name: 'В корзину' });
     this.submitButton = page.getByRole('button', { name: 'Оформить заказ' });
-    this.anyPrice = page.locator('.flex.items-center.gap-4');
     this.notZeroPrice = page.getByText('0.00 руб.');
     this.imageInCart = page.locator('.flex.items-center img');
 
@@ -91,7 +89,6 @@ parsePrice(text) {  // находим сумму в корзине и распа
   return parseFloat(text.replace(/[^\d.,]/g, '').replace(',', '.'));
 }
 
-
 async twoItemsAddToCart(productIds = []) { // для тк с подсчётом суммы - добавляем 2 товара в корзину
   for (const id of productIds) {
 
@@ -102,10 +99,9 @@ async twoItemsAddToCart(productIds = []) { // для тк с подсчётом 
     await productLink.waitFor({ state: 'visible', timeout: 5000 }); 
     await productLink.click();
     await this.AddButtonOnPage.waitFor({ state: 'visible', timeout: 7000 });  // Ждём кнопку "Добавить в корзину"
-    await this.AddButtonOnPage.click(); // Добавляем товар
+    await this.AddButtonOnPage.click(); // добавляем товар
   }
 }
-
 
 async sumTwoProductPrices() { // складываем цены из каталога по товарам
 
@@ -114,19 +110,19 @@ async sumTwoProductPrices() { // складываем цены из катало
     const text = await this.priceToSum.innerText();
     return parseFloat(text.replace(/[^\d.,]/g, '').replace(',', '.'));
   };
-  await this.page.goto('/');  // --- 1. Первый товар ---
+  await this.page.goto('/');  // первый товар
   await this.itemLinkPage.waitFor({ state: 'visible', timeout: 7000 });
   await this.itemLinkPage.click();
 
   const price1 = await getPrice();
 
-  await this.page.goto('/');  // --- 2. Второй товар ---
+  await this.page.goto('/');  // второй товар
   await this.itemLinkPage2.waitFor({ state: 'visible', timeout: 7000 });
   await this.itemLinkPage2.click();
 
   const price2 = await getPrice();
 
-  return price1 + price2;  // --- 3. Складываем ---
+  return price1 + price2;  // складываем
 }
 
  async imageAddForChecking() {
@@ -136,18 +132,15 @@ async sumTwoProductPrices() { // складываем цены из катало
     await this.cartIcon.click();
 
   }
+ 
+async checkItemImageIsValid() { // проверяем саму ссылку на картинку
+  const img = this.imageInCart.first();
+  const src = await img.getAttribute('src');
 
-async getImageSrc() { // работаем со ссылкой на картинку с src
-  const src = await this.imageInCart.first().getAttribute('src');
-  console.log("SRC картинки:", src);
-  return src;
-}
+  const absoluteUrl = new URL(src, this.page.url()).href;
+  const response = await this.page.request.get(absoluteUrl);
 
-async checkImageNot404(src) { // работаем со ссылкой на картинку 
-  const response = await this.page.request.get(src);
-  console.log("Статус ответа картинки:", response.status());
   expect(response.status()).toBe(200);
 }
 
- 
 }

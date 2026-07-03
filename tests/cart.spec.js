@@ -29,9 +29,9 @@ test.describe('Cart module tests', () => {
     await login.goto();
     await login.login(user.email, user.password); // логинимся по методу из LoginPage
     await expect(cart.catalogOfItemsTitle).toBeVisible();
-    await cart.openCartPage({ timeout: 3000 }); // подождём прогрузку Корзины
+    await cart.openCartPage({ timeout: 500 }); // подождём прогрузку Корзины
 console.log(">>> beforeEach: проверяем товары в корзине");
-await cart.clearCart({ timeout: 3000 });
+await cart.clearCart({ timeout: 500 });
 console.log(">>> beforeEach: корзина пуста");
 
   });
@@ -62,8 +62,8 @@ console.log(">>> beforeEach: корзина пуста");
     await cart.goToProductPage();
     await cart.getProductName(); 
     await cart.selectTwoSameItems();
-    await cart.openCartPage({ timeout: 3000 });
-    const count = await cart.countTwoSameItems({ timeout: 3000 });
+    await cart.openCartPage({ timeout: 500 });
+    const count = await cart.countTwoSameItems({ timeout: 500 });
 
     expect(count).toBe(2);
   });
@@ -77,7 +77,7 @@ console.log(">>> beforeEach: корзина пуста");
     await cart.openCartPage();
     await cart.clearCart();
 
-    await expect(cart.emptyCart).toBeVisible({ timeout: 5000 });
+    await expect(cart.emptyCart).toBeVisible({ timeout: 500 });
   });
 
   test('5. The [Оформить заказ] button is clickable', async ({ page }, testInfo) => {
@@ -120,21 +120,17 @@ test('6. Total price is calculated correctly', async ({ page }, testInfo) => {
     await cart.openCartPage();
     await page.pause();
 
-    await expect(cart.submitButton).toBeDisabled({ timeout: 3000 });
+    await expect(cart.submitButton).toBeDisabled({ timeout: 500 });
   });
 
 
-  test('8. Item image is displayed in the Cart', async ({ page }, testInfo) => { // Failed
-    console.log(`>>> Тест 8 выполняется под пользователем: ${testInfo.user.email}`);
+test('8. Item image is displayed in the Cart', async ({ page }) => { // Failed
+  const cart = new CartPage(page);
 
-    const cart = new CartPage(page);
-    await cart.imageAddForChecking();
-    const img = cart.imageInCart.first({ timeout: 500 });
-    const src = await img.getAttribute('src');
-    const absoluteUrl = new URL(src, page.url()).href;
-    const response = await page.request.get(absoluteUrl);
-    expect(response.status()).toBe(200);
-  });
+  await cart.imageAddForChecking();
+  await cart.checkItemImageIsValid();
+});
+
 
   test('9. The Cart is saved after re-login', async ({ page }, testInfo) => {
     console.log(`>>> Тест 9 выполняется под пользователем: ${testInfo.user.email}`);
@@ -145,11 +141,9 @@ test('6. Total price is calculated correctly', async ({ page }, testInfo) => {
     await cart.addItemToCart();
     await cart.twoItemsAddToCart();
     await login.logout();
-
-    // повторный вход тем же юзером
-    await login.login(testInfo.user.email, testInfo.user.password);
-
+    await login.login(testInfo.user.email, testInfo.user.password);   // повторный вход тем же юзером
     await cart.openCartPage();
+
     await expect(cart.emptyCart).not.toBeVisible();
   });
 

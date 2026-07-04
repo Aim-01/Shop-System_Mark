@@ -5,7 +5,7 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
 
-  // 🔥 Все тесты идут последовательно
+  // Все тесты идут последовательно
   fullyParallel: false,
   workers: 1,
 

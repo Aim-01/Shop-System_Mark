@@ -1,45 +1,36 @@
 // tests/fixtures/fixtureCart.js
 
-// import { test as base } from '@playwright/test';
-// import { CartPage } from '../../pages/CartPage';
-// import { LoginPage } from '../../pages/LoginPage';
+import { test as base, expect } from '@playwright/test';
 
-// export const test = base.extend({
-//   user: async ({}, use, testInfo) => {
-//     const title = testInfo.title;
+import { CartPage } from '../../pages/CartPage';
+import { LoginPage } from '../../pages/LoginPage';
 
-//     const user =
-//       title.startsWith('6.') ||
-//       title.startsWith('7.')
-//         ? { email: "user2@test.com", password: "user123" }
-//         : { email: "user1@test.com", password: "user123" };
+const user1 = { email: "user1@test.com", password: "user123" };
+const user2 = { email: "user2@test.com", password: "user123" };
 
-//     await use(user);
-//   },
+export const test = base.extend({
+  cartSetup: async ({ page }, use, testInfo) => {
 
-// cart: async ({ page, user }, use) => {
-//   console.log(`>>> beforeEach: тест выполняется под пользователем ${user.email}`);
+    const cart = new CartPage(page);
+    const login = new LoginPage(page);
+    const title = testInfo.title;  // выбор пользователя по номеру теста
+    const user =
+      title.startsWith('6.') ||
+      title.startsWith('7.')
+        ? user2
+        : user1;
 
-//   const login = new LoginPage(page);
-//   const cart = new CartPage(page);
+    testInfo.user = user;
 
-//   await login.goto();
-//   await login.login(user.email, user.password);
+    await login.goto();  // логин
+    await login.login(user.email, user.password);
 
-//   console.log(">>> beforeEach: открываем корзину");
-//   await cart.openCartPage();
+    await expect(cart.catalogOfItemsTitle).toBeVisible();  // проверка каталога
 
-//   const deleteButtons = page.locator('button:has-text("Удалить")'); // логирование товаров ДО очистки
-//   const before = await deleteButtons.count();
-//   console.log(`>>> beforeEach: товаров в корзине ДО очистки = ${before}`);
-//   console.log(">>> beforeEach: начинаем очистку корзины");
-//   await cart.clearCart();
-
-//   const after = await deleteButtons.count(); // логирование товаров ПОСЛЕ очистки
-//   console.log(`>>> beforeEach: товаров в корзине ПОСЛЕ очистки = ${after}`);
-//   console.log(">>> beforeEach: корзина очищена");
-
-//   await use(cart);
-// }
-
-// });
+    console.log(">>> beforeEach: проверяем товары в корзине"); // очистка корзины
+    await cart.openCartPage();
+    await cart.clearCart();
+    console.log(">>> beforeEach: корзина пуста");
+    await use(); // фикстура ничего не возвращает — просто выполняет подготовку
+  }
+});

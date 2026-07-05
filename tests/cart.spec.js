@@ -5,10 +5,9 @@ import { test } from '../tests/fixtures/fixtureCart';
 import {  expect } from '@playwright/test';
 import { CartPage } from '../pages/CartPage';
 import { LoginPage } from '../pages/LoginPage';
+import { users } from './testData/users';
 
-
-const user1 = { email: "user1@test.com", password: "user123" }; // тестовые данные юзеров
-const user2 = { email: "user2@test.com", password: "user123" };
+const { user1, user2 } = users; //тестовые данные из testData
 
 test.describe('Cart module tests', () => {
 

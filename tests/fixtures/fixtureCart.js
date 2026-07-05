@@ -4,9 +4,9 @@ import { test as base, expect } from '@playwright/test';
 
 import { CartPage } from '../../pages/CartPage';
 import { LoginPage } from '../../pages/LoginPage';
+import { users } from '../testData/users';
 
-const user1 = { email: "user1@test.com", password: "user123" };
-const user2 = { email: "user2@test.com", password: "user123" };
+const { user1, user2 } = users;
 
 export const test = base.extend({
   cartSetup: async ({ page }, use, testInfo) => {

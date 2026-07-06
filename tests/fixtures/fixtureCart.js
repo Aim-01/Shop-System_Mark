@@ -31,6 +31,7 @@ export const test = base.extend({
     await cart.openCartPage();
     await cart.clearCart();
     console.log(">>> beforeEach: корзина пуста");
+
     await use(); // фикстура ничего не возвращает — просто выполняет подготовку
   }
 });

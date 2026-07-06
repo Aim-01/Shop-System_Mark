@@ -2,6 +2,7 @@
 
 
 import { expect } from '@playwright/test';
+import { asyncWrapProviders } from 'node:async_hooks';
 
 export class CartPage {
   constructor(page) {
@@ -42,6 +43,11 @@ export class CartPage {
 
   async goToProductPage(){
     await this.itemLinkPage.click(); // должно быть открытие страницы товара (для тк с 2мя одинаковыми в корзину)
+  }
+
+  async openCatalogWithItems(){
+    await this.gotoCatalog();
+    await this.goToProductPage();
   }
 
 async getProductName() {

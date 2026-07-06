@@ -24,8 +24,7 @@ test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
 
     const cart = new CartPage(page);
 
-    await cart.gotoCatalog();
-    await cart.goToProductPage();
+   await cart.openCatalogWithItems();
     await cart.addItemToCart();
 
     await cart.openCartPage();
@@ -37,8 +36,7 @@ test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
 
     const cart = new CartPage(page);
 
-    await cart.gotoCatalog();
-    await cart.goToProductPage();
+    await cart.openCatalogWithItems();
 
     await cart.getProductName();
     await cart.selectTwoSameItems();
@@ -54,8 +52,7 @@ test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
 
     const cart = new CartPage(page);
 
-    await cart.gotoCatalog();
-    await cart.goToProductPage();
+    await cart.openCatalogWithItems();
     await cart.addItemToCart();
 
     await cart.openCartPage();
@@ -69,8 +66,7 @@ test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
 
     const cart = new CartPage(page);
 
-    await cart.gotoCatalog();
-    await cart.goToProductPage();
+    await cart.openCatalogWithItems();
     await cart.addItemToCart();
 
     await cart.openCartPage();
@@ -78,7 +74,7 @@ test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
 
     await expect(cart.orderSubmitToast).toBeVisible();
   });
-
+  
   test('6. Total price is calculated correctly', async ({ page, cartSetup }, testInfo) => {
     console.log(`>>> Тест 6 выполняется под пользователем: ${testInfo.user.email}`);
 
@@ -119,10 +115,7 @@ test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
     const cart = new CartPage(page);
     const login = new LoginPage(page);
 
-    await cart.gotoCatalog();
-    await cart.goToProductPage();
-    await cart.addItemToCart();
-
+    await cart.openCatalogWithItems();
     await cart.twoItemsAddToCart([1, 2]);
 
     await login.logout();
@@ -131,6 +124,5 @@ test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
     await cart.openCartPage();
     await expect(cart.emptyCart).not.toBeVisible();
   });
-
 
 });

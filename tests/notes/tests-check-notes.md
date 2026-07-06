@@ -9,3 +9,5 @@
 // npx playwright test tests/login.spec.js
 
 // npx playwright test tests/cart.spec.js
+
+//  npx playwright test tests/registration.spec.js

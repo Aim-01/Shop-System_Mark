@@ -15,8 +15,8 @@ export class RegistrationPage {
 
     this.registrationButton = page.getByRole('button', { name: 'Зарегистрироваться' });
     
-    this.login_Link = page.getByRole('link', { name: 'Войти' });
-    this.registration_Link = page.getByRole('link', { name: 'Зарегистрироваться' });
+  //  this.login_Link = page.getByRole('link', { name: 'Войти' });
+   // this.registration_Link = page.getByRole('link', { name: 'Зарегистрироваться' });
 
     this.name_RequiredError = page.getByText('Имя обязательно');   
     this.surname_RequiredError = page.getByText('Фамилия обязательна');
@@ -36,7 +36,7 @@ export class RegistrationPage {
 
   }
 
-  async goto() {
+  async gotoRegPage() {
     await this.page.goto('/register'); // baseURL подставится автоматически часть c register
   }
 

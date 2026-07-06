@@ -1,29 +1,24 @@
 // tests/registration.spec.js
 
-import { test, expect } from '@playwright/test';
-import { RegistrationPage } from '../pages/RegistrationPage';
+import { test } from './fixtures/fixtureRegistration';
+import { expect } from '@playwright/test';
 
+import { LoginPage } from '../pages/LoginPage';
 
 test.describe('Registration form tests', () => {
 
-test('1.The link "Зарегистрироваться" is clickable', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
+test('1.The link "Зарегистрироваться" is clickable', async ({ registrationSetup }) => {
+  const registrationPage = registrationSetup;
+  const login = new LoginPage(registrationPage.page);
 
-  // Precondition
-    await registrationPage.goto();
-    await expect(registrationPage.title).toBeVisible();
 
-  // Steps
-  await registrationPage.login_Link.click();
-  await registrationPage.registration_Link.click();
+  await login.loginLink.click();
+  await login.registrationLink.click();
   
-
-  // Result: открывается форма Создать аккаунт
-  await expect(page.getByText('Создать аккаунт'));
+  await expect(registrationPage.title).toBeVisible();
 });
 
-// Генераторы случайных данных для регистрации через функцию
-function randomString(length = 8) {
+function randomString(length = 8) { // Генераторы случайных данных для регистрации через функцию
   return Math.random().toString(36).substring(2, 2 + length);
 }
 
@@ -31,12 +26,8 @@ function randomEmail() {
   return `${randomString(6)}@test.com`;
 }
 
-
-test('2. User is able to Register', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
+test('2. User is able to Register', async ({ registrationSetup }) => {
+  const registrationPage = registrationSetup;
 
   // Генерация случайных данных
   const nam_e = randomString();
@@ -56,20 +47,13 @@ test('2. User is able to Register', async ({ page }) => {
     passwor_d
   );
 
-
   await expect(registrationPage.validCredentialsToast).toBeVisible(); //нижний правый угол - тоаст-уведомление об успехе "Регистрация прошла успешно, теперь вы можете войти"
 
 });
 
 
-test('3. User is trying to register with empty fields', async ({ page }) => {
-   const registrationPage = new RegistrationPage(page);
-
-  // Precondition
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
-
-  // Steps
+test('3. User is trying to register with empty fields', async ({ registrationSetup }) => {
+  const registrationPage = registrationSetup;
   await registrationPage.registrationButton.click();
 
   // Result: появляется предупреждение для обязательных полей
@@ -82,12 +66,8 @@ test('3. User is trying to register with empty fields', async ({ page }) => {
 });
 
 
-test('4. User is trying to enter an invalid formatted email', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-
-  // Precondition
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
+test('4. User is trying to enter an invalid formatted email', async ({ registrationSetup }) => {
+  const registrationPage = registrationSetup;
 
   // Test data
   const nameReg = 'qazx';
@@ -106,12 +86,8 @@ test('4. User is trying to enter an invalid formatted email', async ({ page }) =
 });
 
 
-test('5. User is trying to enter invaid (short) password (registration module)', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-
-  //Precondition
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
+test('5. User is trying to enter invalid (short) password', async ({ registrationSetup }) => { //Failed
+  const registrationPage = registrationSetup;
 
   // Test data
   const nameReg = 'qazx';
@@ -130,12 +106,8 @@ test('5. User is trying to enter invaid (short) password (registration module)',
 });
 
 
-test('6. User trying to enter registered username (registration module)', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-
-  //Precondition
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
+test('6. User trying to enter registered username', async ({ registrationSetup }) => { //Failed
+  const registrationPage = registrationSetup;
 
   // Test data
   const nameReg = 'qazx';
@@ -154,12 +126,8 @@ test('6. User trying to enter registered username (registration module)', async 
 });
 
 
-test('7. User is trying to enter registered Email (registration module)', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-
-  //Precondition
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
+test('7. User is trying to enter registered Email', async ({ registrationSetup }) => {
+  const registrationPage = registrationSetup;
 
   // Test data
   const nameReg = 'qazx';
@@ -178,12 +146,8 @@ test('7. User is trying to enter registered Email (registration module)', async 
 });
 
 
-test('8. User is trying to enter an invalid formatted Phone number', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-
-  //Precondition
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
+test('8. User is trying to enter invalid formatted Phone number', async ({ registrationSetup }) => {
+  const registrationPage = registrationSetup;
 
   // Test data
   const nameReg = 'qazx';
@@ -202,12 +166,8 @@ test('8. User is trying to enter an invalid formatted Phone number', async ({ pa
 });
 
 
-test('9. User trying to enter spaces in fields', async ({ page }) => {
-  const registrationPage = new RegistrationPage(page);
-
-  //Precondition
-  await registrationPage.goto();
-  await expect(registrationPage.title).toBeVisible();
+test('9. User trying to enter spaces in fields', async ({ registrationSetup }) => { //Failed
+  const registrationPage = registrationSetup;
 
   // Test data
   const nameReg = '   qazx   ';

@@ -4,6 +4,16 @@ import { test } from './fixtures/fixtureRegistration';
 import { expect } from '@playwright/test';
 
 import { LoginPage } from '../pages/LoginPage';
+import { randomString, randomEmail } from './helpers/dataGeneratorHelper';
+
+import {                                   // статические тестовые данные
+  invalidEmailData,
+  shortPasswordData,
+  registeredUsernameData,
+  registeredEmailData,
+  invalidPhoneData,
+  spacesData
+} from '../tests/testData/registrationTestData';
 
 test.describe('Registration form tests', () => {
 
@@ -11,20 +21,11 @@ test('1.The link "Зарегистрироваться" is clickable', async ({ 
   const registrationPage = registrationSetup;
   const login = new LoginPage(registrationPage.page);
 
-
   await login.loginLink.click();
   await login.registrationLink.click();
   
   await expect(registrationPage.title).toBeVisible();
 });
-
-function randomString(length = 8) { // Генераторы случайных данных для регистрации через функцию
-  return Math.random().toString(36).substring(2, 2 + length);
-}
-
-function randomEmail() {
-  return `${randomString(6)}@test.com`;
-}
 
 test('2. User is able to Register', async ({ registrationSetup }) => {
   const registrationPage = registrationSetup;

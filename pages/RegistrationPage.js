@@ -51,4 +51,16 @@ export class RegistrationPage {
   await this.registrationButton.click();
 }
 
+get requiredErrors() {
+  return [
+    this.name_RequiredError,
+    this.surname_RequiredError,
+    this.email_RequiredError,
+    this.username_RequiredError,
+    this.phone_RequiredError,
+    this.password_RequiredError
+  ];
+}
+
+
 }

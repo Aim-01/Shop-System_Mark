@@ -30,23 +30,23 @@ test('1.The link "Зарегистрироваться" is clickable', async ({ 
 test('2. User is able to Register', async ({ registrationSetup }) => {
   const registrationPage = registrationSetup;
 
-  // Генерация случайных данных
-  const nam_e = randomString();
-  const surnam_e = randomString();
-  const emai_l = randomEmail();
-  const usernam_e = randomString();
-  const phon_e = '+1234567890';
-  const passwor_d = 'Qaz123456';
+const data = {
+  nam_e: randomString(),
+  surnam_e: randomString(),
+  emai_l: randomEmail(),
+  usernam_e: randomString(),
+  phon_e: '+1234567890',
+  passwor_d: 'Qaz123456'
+};
 
-  // Steps
-  await registrationPage.registration(
-    nam_e,
-    surnam_e,
-    emai_l,
-    usernam_e,
-    phon_e,
-    passwor_d
-  );
+ await registrationPage.registration(
+  data.nam_e,
+  data.surnam_e,
+  data.emai_l,
+  data.usernam_e,
+  data.phon_e,
+  data.passwor_d
+);
 
   await expect(registrationPage.validCredentialsToast).toBeVisible(); //нижний правый угол - тоаст-уведомление об успехе "Регистрация прошла успешно, теперь вы можете войти"
 
@@ -54,54 +54,44 @@ test('2. User is able to Register', async ({ registrationSetup }) => {
 
 
 test('3. User is trying to register with empty fields', async ({ registrationSetup }) => {
-  const registrationPage = registrationSetup;
+ const registrationPage = registrationSetup;
+
   await registrationPage.registrationButton.click();
 
-  // Result: появляется предупреждение для обязательных полей
-  await expect(registrationPage.name_RequiredError).toBeVisible();
-  await expect(registrationPage.surname_RequiredError).toBeVisible();
-  await expect(registrationPage.email_RequiredError).toBeVisible();
-  await expect(registrationPage.username_RequiredError).toBeVisible();
-  await expect(registrationPage.phone_RequiredError).toBeVisible();
-  await expect(registrationPage.password_RequiredError).toBeVisible();
+  for (const error of registrationPage.requiredErrors) {
+    await expect(error).toBeVisible();
+  }
 });
 
 
 test('4. User is trying to enter an invalid formatted email', async ({ registrationSetup }) => {
   const registrationPage = registrationSetup;
 
-  // Test data
-  const nameReg = 'qazx';
-  const surnameReg = 'zaqx';
-  const emailReg = 'zaqxtest.com'; // invalid
-  const usernameReg = 'qazx';
-  const phoneReg = '+123456789';
-  const passwordReg = 'qazx123456';
+ await registrationPage.registration(
+    invalidEmailData.name,
+    invalidEmailData.surname,
+    invalidEmailData.email,
+    invalidEmailData.username,
+    invalidEmailData.phone,
+    invalidEmailData.password
+  );
 
-  // Steps
-  await registrationPage.registration(nameReg, surnameReg, emailReg, usernameReg, phoneReg, passwordReg);
-
-  // Result: нижний правый угол - тоаст-уведомление об ошибке
   await expect(registrationPage.invalidEmailToast).toBeVisible();
-
 });
 
 
 test('5. User is trying to enter invalid (short) password', async ({ registrationSetup }) => { //Failed
   const registrationPage = registrationSetup;
 
-  // Test data
-  const nameReg = 'qazx';
-  const surnameReg = 'zaqx';
-  const emailReg = 'zaqx@test.com';
-  const usernameReg = 'qazx';
-  const phoneReg = '+123456789';
-  const passwordReg = 'qaz123';  // invalid
+  await registrationPage.registration(
+    shortPasswordData.name,
+    shortPasswordData.surname,
+    shortPasswordData.email,
+    shortPasswordData.username,
+    shortPasswordData.phone,
+    shortPasswordData.password
+  );
 
-  //Steps
-  await registrationPage.registration(nameReg, surnameReg, emailReg, usernameReg, phoneReg, passwordReg);
-
-  //Result: нижний правый угол - тоаст-уведомление об ошибке в пароле
   await expect(registrationPage.invalidPasswordToast).toBeVisible();
 
 });
@@ -110,18 +100,15 @@ test('5. User is trying to enter invalid (short) password', async ({ registratio
 test('6. User trying to enter registered username', async ({ registrationSetup }) => { //Failed
   const registrationPage = registrationSetup;
 
-  // Test data
-  const nameReg = 'qazx';
-  const surnameReg = 'zaqx';
-  const emailReg = 'zaqx@test.com';
-  const usernameReg = 'user1'; // invalid
-  const phoneReg = '+123456789';
-  const passwordReg = 'qazx123456';  
+ await registrationPage.registration(
+    registeredUsernameData.name,
+    registeredUsernameData.surname,
+    registeredUsernameData.email,
+    registeredUsernameData.username,
+    registeredUsernameData.phone,
+    registeredUsernameData.password
+  );
 
-  //Steps
-  await registrationPage.registration(nameReg, surnameReg, emailReg, usernameReg, phoneReg, passwordReg);
-
-  //Result: нижний правый угол - тоаст-уведомление c текстом об ошибке в username 
   await expect(registrationPage.invalidUsernameToast).toBeVisible();
 
 });
@@ -130,18 +117,15 @@ test('6. User trying to enter registered username', async ({ registrationSetup }
 test('7. User is trying to enter registered Email', async ({ registrationSetup }) => {
   const registrationPage = registrationSetup;
 
-  // Test data
-  const nameReg = 'qazx';
-  const surnameReg = 'zaqx';
-  const emailReg = 'user1@test.com';  // invalid 
-  const usernameReg = 'qazx';
-  const phoneReg = '+123456789';
-  const passwordReg = 'qazx123456';  
+  await registrationPage.registration(
+    registeredEmailData.name,
+    registeredEmailData.surname,
+    registeredEmailData.email,
+    registeredEmailData.username,
+    registeredEmailData.phone,
+    registeredEmailData.password
+  );
 
-  //Steps
-  await registrationPage.registration(nameReg, surnameReg, emailReg, usernameReg, phoneReg, passwordReg);
-
-  //Result: нижний правый угол - тоаст-уведомление об ошибке в Email 
   await expect(registrationPage.invalidEmaiRegToast).toBeVisible();
 
 });
@@ -150,18 +134,15 @@ test('7. User is trying to enter registered Email', async ({ registrationSetup }
 test('8. User is trying to enter invalid formatted Phone number', async ({ registrationSetup }) => {
   const registrationPage = registrationSetup;
 
-  // Test data
-  const nameReg = 'qazx';
-  const surnameReg = 'zaqx';
-  const emailReg = 'zaqx@test.com'; 
-  const usernameReg = 'qazx';
-  const phoneReg = '123456789';   // invalid 
-  const passwordReg = 'qazx123456';  
+  await registrationPage.registration(
+    invalidPhoneData.name,
+    invalidPhoneData.surname,
+    invalidPhoneData.email,
+    invalidPhoneData.username,
+    invalidPhoneData.phone,
+    invalidPhoneData.password
+  );
 
-  //Steps
-  await registrationPage.registration(nameReg, surnameReg, emailReg, usernameReg, phoneReg, passwordReg);
-
-  //Result: нижний правый угол - тоаст-уведомление об ошибке в "Телефон" поле 
   await expect(registrationPage.invalidPhoneToast).toBeVisible();
 
 });
@@ -170,18 +151,15 @@ test('8. User is trying to enter invalid formatted Phone number', async ({ regis
 test('9. User trying to enter spaces in fields', async ({ registrationSetup }) => { //Failed
   const registrationPage = registrationSetup;
 
-  // Test data
-  const nameReg = '   qazx   ';
-  const surnameReg = '   zaqx   ';
-  const emailReg = '   zaqx@test.com'; 
-  const usernameReg = '  qazx';
-  const phoneReg = '   +123456789   '; 
-  const passwordReg = '   qazx123456   ';  
+  await registrationPage.registration(
+    spacesData.name,
+    spacesData.surname,
+    spacesData.email,
+    spacesData.username,
+    spacesData.phone,
+    spacesData.password
+  );
 
-  //Steps
-  await registrationPage.registration(nameReg, surnameReg, emailReg, usernameReg, phoneReg, passwordReg);
-
-  //Result: подсвечены красным поля с невалидными данными (все = 12 красных строк (по 2 на 1 поле))
   await expect(registrationPage.redText).toHaveCount(12);
 
 });

@@ -3,6 +3,9 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { loginUser } from './helpers/loginHelper';
+import { validUser, invalidUsers } from './testData/loginData';
+
+// import { validUser, invalidUsers } from './data/loginData';
 
 test.describe('Login form tests', () => {
 
@@ -10,12 +13,11 @@ test.describe('Login form tests', () => {
     await page.goto('/login');
   });
 
-  test('1. The User is able to Log in', async ({ page }) => {
-    const loginPage = await loginUser(page, 'user1@test.com', 'user123');
+ test('1. The User is able to Log in', async ({ page }) => {
+    const loginPage = await loginUser(page, validUser.email, validUser.password);
     await expect(loginPage.katalogTovarovTitle).toBeVisible();
   });
-
-  test('2. The link "Войти" is clickable', async ({ page }) => {
+test('2. The link "Войти" is clickable', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.registrationLink.click();
     await loginPage.loginLink.click();
@@ -29,24 +31,24 @@ test.describe('Login form tests', () => {
     await expect(loginPage.passwordRequiredError).toBeVisible();
   });
 
-  test('4. The User is trying to log in with invalid formatted email', async ({ page }) => {
-    const loginPage = await loginUser(page, 'user1test.com', 'user123');
+  test('4. Invalid formatted email', async ({ page }) => {
+    const loginPage = await loginUser(page, invalidUsers.invalidEmailFormat.email, invalidUsers.invalidEmailFormat.password);
     await expect(loginPage.invalidCredentialsToast).toBeVisible();
   });
 
-  test('5. The User is trying to log in with invalid password', async ({ page }) => {
-    const loginPage = await loginUser(page, 'user1@test.com', 'qwe123');
+  test('5. Invalid password', async ({ page }) => {
+    const loginPage = await loginUser(page, invalidUsers.wrongPassword.email, invalidUsers.wrongPassword.password);
     await expect(loginPage.invalidCredentialsToast).toBeVisible();
   });
 
-  test("6. The User is trying to log in with an unregistered email", async ({ page }) => {
-    const loginPage = await loginUser(page, 'qwert@test.com', 'qwert123');
+  test('6. Unregistered email', async ({ page }) => {
+    const loginPage = await loginUser(page, invalidUsers.unregisteredUser.email, invalidUsers.unregisteredUser.password);
     await expect(loginPage.invalidCredentialsToast).toBeVisible();
   });
 
-  test('7. The User is trying to enter spaces in fields', async ({ page }) => {
-    const loginPage = await loginUser(page, '   user1@test.com', '   user123   ');
+  test('7. Spaces in fields', async ({ page }) => {
+    const loginPage = await loginUser(page, invalidUsers.withSpaces.email, invalidUsers.withSpaces.password);
     await expect(loginPage.invalidCredentialsToast).toBeVisible();
   });
-
+  
 });

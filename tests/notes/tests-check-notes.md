@@ -11,3 +11,5 @@
 // npx playwright test tests/cart.spec.js
 
 //  npx playwright test tests/registration.spec.js
+
+// npx playwright test --project=api

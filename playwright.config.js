@@ -5,7 +5,6 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
 
-  // Все тесты идут последовательно
   fullyParallel: false,
   workers: 1,
 
@@ -19,9 +18,18 @@ export default defineConfig({
   },
 
   projects: [
+    // UI tests
     {
       name: 'chromium_Docker_project',
+      testDir: './tests/UI',
       use: { baseURL: 'http://localhost:5173' },
+    },
+
+    // API tests
+    {
+      name: 'api',
+      testDir: './tests/API',
+      use: { baseURL: 'http://localhost:3000' },
     }
   ]
 });

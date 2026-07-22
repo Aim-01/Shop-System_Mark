@@ -1,11 +1,9 @@
-// tests/registration.spec.js
+// tests/UI/registration.spec.js
 
-import { test } from './fixtures/fixtureRegistration';
 import { expect } from '@playwright/test';
-
-import { LoginPage } from '../pages/LoginPage';
-import { randomString, randomEmail } from './helpers/dataGeneratorHelper';
-
+import { test } from '../../fixtures/fixtureRegistration';
+import { LoginPage } from '../../pages/LoginPage';
+import { randomString, randomEmail } from '../../helpers/dataGeneratorHelper';
 import {                                   // статические тестовые данные
   invalidEmailData,
   shortPasswordData,
@@ -13,7 +11,7 @@ import {                                   // статические тесто�
   registeredEmailData,
   invalidPhoneData,
   spacesData
-} from '../tests/testData/registrationTestData';
+} from '../../testData/registrationTestData';
 
 test.describe('Registration form tests', () => {
 

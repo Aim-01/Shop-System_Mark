@@ -1,4 +1,4 @@
-// tests/helpers/dataGeneratorHelper.js
+// helpers/dataGeneratorHelper.js
 
  // Генераторы случайных данных для регистрации через функцию
 export function randomString(length = 8) {

@@ -1,4 +1,4 @@
-// tests/testData/loginData.js
+// testData/loginData.js
 
 export const validUser = {
   email: 'user1@test.com',

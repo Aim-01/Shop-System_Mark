@@ -1,11 +1,11 @@
-// // tests/cart.spec.js
-// // тесты последовательные
+// tests/UI/cart.spec.js 
+// тесты последовательные
 
-import { test } from '../tests/fixtures/fixtureCart';
-import {  expect } from '@playwright/test';
-import { CartPage } from '../pages/CartPage';
-import { LoginPage } from '../pages/LoginPage';
-import { users } from './testData/users';
+import { expect } from '@playwright/test';
+import { test } from '../../fixtures/fixtureCart';
+import { CartPage } from '../../pages/CartPage';
+import { LoginPage } from '../../pages/LoginPage';
+import { users } from '../../testData/users';
 
 const { user1, user2 } = users; //тестовые данные из testData
 

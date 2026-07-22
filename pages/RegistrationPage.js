@@ -14,9 +14,6 @@ export class RegistrationPage {
     this.password_Input = page.getByPlaceholder("••••••••");
 
     this.registrationButton = page.getByRole('button', { name: 'Зарегистрироваться' });
-    
-  //  this.login_Link = page.getByRole('link', { name: 'Войти' });
-   // this.registration_Link = page.getByRole('link', { name: 'Зарегистрироваться' });
 
     this.name_RequiredError = page.getByText('Имя обязательно');   
     this.surname_RequiredError = page.getByText('Фамилия обязательна');
@@ -61,6 +58,5 @@ get requiredErrors() {
     this.password_RequiredError
   ];
 }
-
 
 }

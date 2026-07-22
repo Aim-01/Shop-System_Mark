@@ -1,9 +1,8 @@
-// tests/fixtures/fixtureCart.js
+// fixtures/fixtureCart.js
 
 import { test as base, expect } from '@playwright/test';
-
-import { CartPage } from '../../pages/CartPage';
-import { LoginPage } from '../../pages/LoginPage';
+import { CartPage } from '../pages/CartPage';
+import { LoginPage } from '../pages/LoginPage';
 import { users } from '../testData/users';
 
 const { user1, user2 } = users;

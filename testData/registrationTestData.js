@@ -1,4 +1,4 @@
-// tests/data/registrationTestData.js
+// testData/registrationTestData.js
 
 export const invalidEmailData = {
   name: 'qazx',

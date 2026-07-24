@@ -5,7 +5,7 @@ import { LoginPage } from '../../pages/LoginPage';
 import { loginUser } from '../../helpers/loginHelper';
 import { validUser, invalidUsers } from '../../testData/loginData';
 
-test.describe('Login form tests', () => {
+test.describe('@ui Login form tests', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/login');

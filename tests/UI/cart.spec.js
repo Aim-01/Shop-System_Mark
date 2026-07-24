@@ -9,7 +9,7 @@ import { users } from '../../testData/users';
 
 const { user1, user2 } = users; //тестовые данные из testData
 
-test.describe('Cart module tests', () => {
+test.describe('@ui Cart module tests', () => {
 
 test('1. The Cart page is displayed', async ({ page, cartSetup }, testInfo) => {
     console.log(`>>> Тест 1 выполняется под пользователем: ${testInfo.user.email}`);

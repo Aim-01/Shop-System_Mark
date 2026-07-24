@@ -13,7 +13,7 @@ import {                                   // статические тесто�
   spacesData
 } from '../../testData/registrationTestData';
 
-test.describe('Registration form tests', () => {
+test.describe('@ui Registration form tests', () => {
 
 test('1.The link "Зарегистрироваться" is clickable', async ({ registrationSetup }) => {
   const registrationPage = registrationSetup;

@@ -4,7 +4,7 @@ import { test, expect }  from '@playwright/test';
 import { randomString, randomEmail } from '../../helpers/dataGeneratorHelper';
 import { validUser, invalidUsers } from '../../testData/loginData';
 
-test.describe('API tests (no using UI!)', () => {
+test.describe('@api API tests (no using UI!)', () => {
 
 
 test('1. Successful login with valid credentials (POST)', async ({ request }) => {
@@ -245,7 +245,7 @@ test('7. Successful retrieval of all products (GET)', async ({ request }) => {
 
 
 
-test('8. Successful deletion of the product (last-5, DELETE) ', async ({ request }) => {
+test('8. Successful deletion of the product (last-1, DELETE) ', async ({ request }) => {
 
   const getResponse = await request.get('/product'); // получили список продуктов
   expect(getResponse.status()).toBe(200);
@@ -254,7 +254,7 @@ test('8. Successful deletion of the product (last-5, DELETE) ', async ({ request
 
   expect(products.length).toBeGreaterThan(0); // смотрим что список не пустой
 
-  const lastProduct = products[products.length - 5]; // второй с конца товар выбираем в списке
+  const lastProduct = products[products.length - 1]; // второй с конца товар выбираем в списке
   console.log(lastProduct.name);
 
   const productId = lastProduct.id;

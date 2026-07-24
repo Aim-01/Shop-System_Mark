@@ -6,6 +6,8 @@
   // Devtools - Sources - поставить breakpoints
 //////
 
+// UI все тесты запускаем по флагу  npx playwright test --grep '@ui'
+
 // npx playwright test tests/UI/login.spec.js
 
 
@@ -14,4 +16,6 @@
 
 // npx playwright test tests/UI/registration.spec.js
 
+
 // npx playwright test --project=api 
+// npx playwright test --grep '@api'
